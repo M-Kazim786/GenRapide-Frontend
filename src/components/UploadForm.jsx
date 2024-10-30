@@ -11,29 +11,51 @@ export default function UploadForm({ onUpload }) {
   const [expandRequirements, setExpandRequirements] = useState(false);
   const [expandResume, setExpandResume] = useState(false);
 
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+
+  //   // Create a plain object to hold the data
+  //   const body = {
+  //     requirements: requirements || undefined,
+  //     requirementsFileName: requirementsFile ? requirementsFile.name : undefined,
+  //     resume: resume || undefined,
+  //     resumeFileName: resumeFile ? resumeFile.name : undefined,
+  //   };
+
+  //   // Log the body object
+  //   console.log("Request body:", body);
+
+  //   onUpload(body);
+  // };
+
+
+
+
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    // Create FormData to hold the data
     const formData = new FormData();
 
-    if (requirementsFile) {
-      formData.append("requirementsFile", requirementsFile);
-    } else if (requirements) {
-      formData.append("requirements", requirements);
+    // Append requirements and file data
+    if (includeRequirements) {
+      if (requirements) formData.append("requirements", requirements);
+      if (requirementsFile) formData.append("requirementsFile", requirementsFile);
     }
 
-    if (resumeFile) {
-      formData.append("resumeFile", resumeFile);
-    } else if (resume) {
-      formData.append("resume", resume);
-    }
+    // Append resume and file data
+    if (resume) formData.append("resume", resume);
+    if (resumeFile) formData.append("resumeFile", resumeFile);
 
-    // Log FormData entries
-    for (let [key, value] of formData.entries()) {
+    // Log the FormData entries (optional, for debugging)
+    for (const [key, value] of formData.entries()) {
       console.log(`${key}:`, value);
     }
 
+    // Send the FormData using onUpload
     onUpload(formData);
-  };
+};
+
 
   const wordCount = (text) => {
     return text.trim() ? text.trim().split(/\s+/).length : 0;
@@ -51,17 +73,13 @@ export default function UploadForm({ onUpload }) {
                 type="checkbox"
                 name="toggle"
                 id="toggle"
-                className={`toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer transition-transform duration-300 ease-in-out ${
-                  includeRequirements ? "translate-x-4 bg-blue-600" : "translate-x-0 bg-white"
-                }`}
+                className={`toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer transition-transform duration-300 ease-in-out ${includeRequirements ? "translate-x-4 bg-blue-600" : "translate-x-0 bg-white"}`}
                 checked={includeRequirements}
                 onChange={() => setIncludeRequirements(!includeRequirements)}
               />
               <label
                 htmlFor="toggle"
-                className={`toggle-label block overflow-hidden h-6 rounded-full cursor-pointer transition-colors duration-300 ${
-                  includeRequirements ? "bg-blue-600" : "bg-gray-300"
-                }`}
+                className={`toggle-label block overflow-hidden h-6 rounded-full cursor-pointer transition-colors duration-300 ${includeRequirements ? "bg-blue-600" : "bg-gray-300"}`}
               ></label>
             </div>
           </div>
@@ -74,7 +92,7 @@ export default function UploadForm({ onUpload }) {
                 <div className="flex justify-between items-center mb-2">
                   <h2 className="text-lg font-medium">Requirements</h2>
                   <div className="flex items-center space-x-2">
-                    <span className="text-sm text-gray-400">{wordCount(requirements)} Words</span> {/* Updated */}
+                    <span className="text-sm text-gray-400">{wordCount(requirements)} Words</span>
                     <button
                       type="button"
                       onClick={() => setExpandRequirements(!expandRequirements)}
@@ -121,7 +139,7 @@ export default function UploadForm({ onUpload }) {
               <div className="flex justify-between items-center mb-2">
                 <h2 className="text-lg font-medium">Projects / Resume</h2>
                 <div className="flex items-center space-x-2">
-                  <span className="text-sm text-gray-400">{wordCount(resume)} Words</span> {/* Updated */}
+                  <span className="text-sm text-gray-400">{wordCount(resume)} Words</span>
                   <button
                     type="button"
                     onClick={() => setExpandResume(!expandResume)}

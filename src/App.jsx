@@ -1,46 +1,44 @@
-import axios from 'axios'
+import axios from 'axios';
 import React, { useState } from "react";
 import UploadForm from "./components/UploadForm.jsx";
 import ResultMessage from "./components/ResultMessage";
 
-
 function App() {
-  const [score, setScore] = useState(null);   // Store score from backend
-  const [missingExperience, setMissingExperience] = useState("");   // Missing experience info
+  const [score, setScore] = useState(null);
+  const [missingExperience, setMissingExperience] = useState("");
 
-  // const backendUrl=import.meta.env.VITE_BACKEND_URL;
-
-
-  // const handleUpload = async (formData) => {
-  //   console.log("working");
-
+  // const handleUpload = async (data) => {
   //   try {
-  //     const response = await axios.post(`/api/v1/modules/proreshape/submit`, formData)
+  //     const response = await axios.post("/api/v1/rewriter/submit", data, {
+  //       headers: {
+  //         "Content-Type": "application/json"
+  //       },
+  //     });
 
-  //     const data = response.data;
+  //     const responseData = response.data;
+  //     console.log("Response data:", responseData);
 
-  //     // Assuming `setScore` and `setMissingExperience` are state setters
-  //     setScore(data.score);
-  //     setMissingExperience(data.missingExperience || "");
+  //     setScore(responseData.score);
+  //     setMissingExperience(responseData.missingExperience || "");
   //   } catch (error) {
-  //     console.error("erorrrrrrrrrr");
+  //     console.error("Error uploading data:", error);
   //   }
   // };
 
 
-  const handleUpload = async (formData) => {
-    console.log("woring");
-
+  const handleUpload = async (formData) => { // Renamed parameter to formData for clarity
     try {
-      const response = await axios.post("/api/v1/modules/proreshape/submit", formData, {
-        headers: { "Content-Type": "multipart/form-data" }
+      const response = await axios.post("/api/v1/rewriter/match", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data" // Set content type to multipart/form-data
+        },
       });
 
-      const data = response.data;
-      console.log(data);
+      const responseData = response.data;
+      console.log("Response data:", responseData);
 
-      setScore(data.score);
-      setMissingExperience(data.missingExperience || "");
+      setScore(responseData.score);
+      setMissingExperience(responseData.missingExperience || "");
     } catch (error) {
       console.error("Error uploading data:", error);
     }
@@ -49,15 +47,8 @@ function App() {
 
 
 
-
-
-
-
-
-
   return (
     <div className="App">
-      {/* <h1>Resume Scoring System</h1> */}
       <UploadForm onUpload={handleUpload} />
       {score !== null && (
         <ResultMessage score={score} missingExperience={missingExperience} />
