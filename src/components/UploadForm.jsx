@@ -5,7 +5,7 @@ import 'boxicons/css/boxicons.min.css';
 export default function UploadForm({ onUpload }) {
   const [requirementsFile, setRequirementsFile] = useState(null);
   const [resumeFile, setResumeFile] = useState(null);
-  const [requirements, setRequirements] = useState(""); 
+  const [requirements, setRequirements] = useState("");
   const [resume, setResume] = useState("");
   const [includeRequirements, setIncludeRequirements] = useState(true);
   const [expandRequirements, setExpandRequirements] = useState(false);
