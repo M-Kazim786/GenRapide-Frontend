@@ -2,12 +2,18 @@ import React, { useState } from "react";
 import { ArrowsPointingOutIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { CubeIcon } from "@heroicons/react/24/solid";
 import ResultMessage from "./ResultMessage.jsx";
-import 'boxicons/css/boxicons.min.css';
+import "boxicons/css/boxicons.min.css";
 
-export default function UploadForm({ onUpload, isLoading, matchPercentage, resultMessage, finalResult }) {
+export default function UploadForm({
+  onUpload,
+  isLoading,
+  matchPercentage,
+  resultMessage,
+  finalResult,
+}) {
   const [requirementsFile, setRequirementsFile] = useState(null);
   const [resumeFile, setResumeFile] = useState(null);
-  const [requirementsText, setRequirementsText] = useState(""); 
+  const [requirementsText, setRequirementsText] = useState("");
   const [resumeText, setResumeText] = useState("");
   const [includeRequirements, setIncludeRequirements] = useState(true);
   const [expandRequirements, setExpandRequirements] = useState(false);
@@ -18,8 +24,10 @@ export default function UploadForm({ onUpload, isLoading, matchPercentage, resul
     const formData = new FormData();
 
     if (includeRequirements) {
-      if (requirementsText) formData.append("requirementsText", requirementsText);
-      if (requirementsFile) formData.append("requirementsFile", requirementsFile);
+      if (requirementsText)
+        formData.append("requirementsText", requirementsText);
+      if (requirementsFile)
+        formData.append("requirementsFile", requirementsFile);
     }
 
     if (resumeText) formData.append("resumeText", resumeText);
@@ -53,13 +61,19 @@ export default function UploadForm({ onUpload, isLoading, matchPercentage, resul
                 type="checkbox"
                 name="toggle"
                 id="toggle"
-                className={`toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer transition-transform duration-300 ease-in-out ${includeRequirements ? "translate-x-4 bg-blue-600" : "translate-x-0 bg-white"}`}
+                className={`toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer transition-transform duration-300 ease-in-out ${
+                  includeRequirements
+                    ? "translate-x-4 bg-blue-600"
+                    : "translate-x-0 bg-white"
+                }`}
                 checked={includeRequirements}
                 onChange={() => setIncludeRequirements(!includeRequirements)}
               />
               <label
                 htmlFor="toggle"
-                className={`toggle-label block overflow-hidden h-6 rounded-full cursor-pointer transition-colors duration-300 ${includeRequirements ? "bg-blue-600" : "bg-gray-300"}`}
+                className={`toggle-label block overflow-hidden h-6 rounded-full cursor-pointer transition-colors duration-300 ${
+                  includeRequirements ? "bg-blue-600" : "bg-gray-300"
+                }`}
               ></label>
             </div>
           </div>
@@ -68,11 +82,19 @@ export default function UploadForm({ onUpload, isLoading, matchPercentage, resul
         <form className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {includeRequirements && (
-              <div className={`bg-[#1E1E1E] rounded-lg p-4 transition-all duration-300 ${expandRequirements ? "fixed top-0 left-0 w-full h-full z-50 bg-[#1E1E1E] p-6" : ""}`}>
+              <div
+                className={`bg-[#1E1E1E] rounded-lg p-4 transition-all duration-300 ${
+                  expandRequirements
+                    ? "fixed top-0 left-0 w-full h-full z-50 bg-[#1E1E1E] p-6"
+                    : ""
+                }`}
+              >
                 <div className="flex justify-between items-center mb-2">
                   <h2 className="text-lg font-medium">Requirements</h2>
                   <div className="flex items-center space-x-2">
-                    <span className="text-sm text-gray-400">{wordCount(requirementsText)} Words</span>
+                    <span className="text-sm text-gray-400">
+                      {wordCount(requirementsText)} Words
+                    </span>
                     <button
                       type="button"
                       onClick={() => setExpandRequirements(!expandRequirements)}
@@ -115,11 +137,19 @@ export default function UploadForm({ onUpload, isLoading, matchPercentage, resul
               </div>
             )}
 
-            <div className={`bg-[#1E1E1E] rounded-lg p-4 transition-all duration-300 ${expandResume ? "fixed top-0 left-0 w-full h-full z-50 bg-[#1E1E1E] p-6" : ""}`}>
+            <div
+              className={`bg-[#1E1E1E] rounded-lg p-4 transition-all duration-300 ${
+                expandResume
+                  ? "fixed top-0 left-0 w-full h-full z-50 bg-[#1E1E1E] p-6"
+                  : ""
+              }`}
+            >
               <div className="flex justify-between items-center mb-2">
                 <h2 className="text-lg font-medium">Projects / Resume</h2>
                 <div className="flex items-center space-x-2">
-                  <span className="text-sm text-gray-400">{wordCount(resumeText)} Words</span>
+                  <span className="text-sm text-gray-400">
+                    {wordCount(resumeText)} Words
+                  </span>
                   <button
                     type="button"
                     onClick={() => setExpandResume(!expandResume)}
@@ -167,7 +197,9 @@ export default function UploadForm({ onUpload, isLoading, matchPercentage, resul
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-3">
                   <CubeIcon className="h-6 w-6 text-orange-500 animate-pulse" />
-                  <span className="text-[#cccfd0]">Generating Content (Analyze)</span>
+                  <span className="text-[#cccfd0]">
+                    Generating Content (Analyze)
+                  </span>
                 </div>
                 <button
                   onClick={handleCancelProcessing}
@@ -205,7 +237,12 @@ export default function UploadForm({ onUpload, isLoading, matchPercentage, resul
                     viewBox="0 0 24 24"
                     stroke="currentColor"
                   >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M19 9l-7 7-7-7"
+                    />
                   </svg>
                 </div>
               </div>
