@@ -1,61 +1,41 @@
 import React, { useState } from "react";
 import { ArrowsPointingOutIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { CubeIcon } from "@heroicons/react/24/solid";
+import ResultMessage from "./ResultMessage.jsx";
 import 'boxicons/css/boxicons.min.css';
 
-export default function UploadForm({ onUpload }) {
+export default function UploadForm({ onUpload, isLoading, matchPercentage, resultMessage, finalResult }) {
   const [requirementsFile, setRequirementsFile] = useState(null);
   const [resumeFile, setResumeFile] = useState(null);
-  const [requirements, setRequirements] = useState("");
-  const [resume, setResume] = useState("");
+  const [requirementsText, setRequirementsText] = useState(""); 
+  const [resumeText, setResumeText] = useState("");
   const [includeRequirements, setIncludeRequirements] = useState(true);
   const [expandRequirements, setExpandRequirements] = useState(false);
   const [expandResume, setExpandResume] = useState(false);
 
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-
-  //   // Create a plain object to hold the data
-  //   const body = {
-  //     requirements: requirements || undefined,
-  //     requirementsFileName: requirementsFile ? requirementsFile.name : undefined,
-  //     resume: resume || undefined,
-  //     resumeFileName: resumeFile ? resumeFile.name : undefined,
-  //   };
-
-  //   // Log the body object
-  //   console.log("Request body:", body);
-
-  //   onUpload(body);
-  // };
-
-
-
-
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    // Create FormData to hold the data
     const formData = new FormData();
 
-    // Append requirements and file data
     if (includeRequirements) {
-      if (requirements) formData.append("requirements", requirements);
+      if (requirementsText) formData.append("requirementsText", requirementsText);
       if (requirementsFile) formData.append("requirementsFile", requirementsFile);
     }
 
-    // Append resume and file data
-    if (resume) formData.append("resume", resume);
+    if (resumeText) formData.append("resumeText", resumeText);
     if (resumeFile) formData.append("resumeFile", resumeFile);
 
-    // Log the FormData entries (optional, for debugging)
     for (const [key, value] of formData.entries()) {
       console.log(`${key}:`, value);
     }
 
-    // Send the FormData using onUpload
     onUpload(formData);
-};
+  };
 
+  const handleCancelProcessing = () => {
+    // cancel functionality here...
+    console.log("Processing cancelled");
+  };
 
   const wordCount = (text) => {
     return text.trim() ? text.trim().split(/\s+/).length : 0;
@@ -92,7 +72,7 @@ export default function UploadForm({ onUpload }) {
                 <div className="flex justify-between items-center mb-2">
                   <h2 className="text-lg font-medium">Requirements</h2>
                   <div className="flex items-center space-x-2">
-                    <span className="text-sm text-gray-400">{wordCount(requirements)} Words</span>
+                    <span className="text-sm text-gray-400">{wordCount(requirementsText)} Words</span>
                     <button
                       type="button"
                       onClick={() => setExpandRequirements(!expandRequirements)}
@@ -105,8 +85,8 @@ export default function UploadForm({ onUpload }) {
                 {expandRequirements ? (
                   <>
                     <textarea
-                      value={requirements}
-                      onChange={(e) => setRequirements(e.target.value)}
+                      value={requirementsText}
+                      onChange={(e) => setRequirementsText(e.target.value)}
                       placeholder="Enter Your Requirements."
                       className="w-full h-[calc(100vh-200px)] bg-[#1E1E1E] text-white placeholder-gray-500 resize-none focus:outline-none"
                     ></textarea>
@@ -120,8 +100,8 @@ export default function UploadForm({ onUpload }) {
                   </>
                 ) : (
                   <textarea
-                    value={requirements}
-                    onChange={(e) => setRequirements(e.target.value)}
+                    value={requirementsText}
+                    onChange={(e) => setRequirementsText(e.target.value)}
                     placeholder="Enter Your Requirements."
                     className="w-full h-64 bg-[#1E1E1E] text-white placeholder-gray-500 resize-none focus:outline-none"
                   ></textarea>
@@ -139,7 +119,7 @@ export default function UploadForm({ onUpload }) {
               <div className="flex justify-between items-center mb-2">
                 <h2 className="text-lg font-medium">Projects / Resume</h2>
                 <div className="flex items-center space-x-2">
-                  <span className="text-sm text-gray-400">{wordCount(resume)} Words</span>
+                  <span className="text-sm text-gray-400">{wordCount(resumeText)} Words</span>
                   <button
                     type="button"
                     onClick={() => setExpandResume(!expandResume)}
@@ -152,8 +132,8 @@ export default function UploadForm({ onUpload }) {
               {expandResume ? (
                 <>
                   <textarea
-                    value={resume}
-                    onChange={(e) => setResume(e.target.value)}
+                    value={resumeText}
+                    onChange={(e) => setResumeText(e.target.value)}
                     placeholder="Enter Your Projects."
                     className="w-full h-[calc(100vh-200px)] bg-[#1E1E1E] text-white placeholder-gray-500 resize-none focus:outline-none"
                   ></textarea>
@@ -167,8 +147,8 @@ export default function UploadForm({ onUpload }) {
                 </>
               ) : (
                 <textarea
-                  value={resume}
-                  onChange={(e) => setResume(e.target.value)}
+                  value={resumeText}
+                  onChange={(e) => setResumeText(e.target.value)}
                   placeholder="Enter Your Projects."
                   className="w-full h-64 bg-[#1E1E1E] text-white placeholder-gray-500 resize-none focus:outline-none"
                 ></textarea>
@@ -182,6 +162,30 @@ export default function UploadForm({ onUpload }) {
             </div>
           </div>
 
+          {isLoading ? (
+            <div className="bg-[#1E1E1E] rounded-lg p-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <CubeIcon className="h-6 w-6 text-orange-500 animate-pulse" />
+                  <span className="text-[#cccfd0]">Generating Content (Analyze)</span>
+                </div>
+                <button
+                  onClick={handleCancelProcessing}
+                  className="px-4 py-2 bg-[#232428] text-[#cccfd0] rounded hover:bg-[#2a2b2f] transition-colors"
+                >
+                  Cancel Processing
+                </button>
+              </div>
+            </div>
+          ) : (
+            matchPercentage !== null && (
+              <ResultMessage
+                matchPercentage={matchPercentage}
+                finalResult={finalResult}
+              />
+            )
+          )}
+
           <div className="bg-[#1E1E1E] rounded-lg p-4">
             <h2 className="text-lg font-medium mb-2">Actions</h2>
             <div className="flex items-center space-x-2">
@@ -191,19 +195,26 @@ export default function UploadForm({ onUpload }) {
                   defaultValue="Analyze"
                 >
                   <option value="Analyze">Analyze</option>
+                  <option value="Check Plagiarism">Check Plagiarism</option>
                 </select>
-                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-white">
-                  <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                    <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                <div className="absolute right-0 top-0 bottom-0 flex items-center px-3 pointer-events-none">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5 text-gray-400"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
                   </svg>
                 </div>
               </div>
               <button
+                type="submit"
                 onClick={handleSubmit}
-                type="button"
-                className="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded"
+                className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
               >
-                <i className="bx bx-send w-5 h-5 -rotate-33"></i>
+                Analyze
               </button>
             </div>
           </div>

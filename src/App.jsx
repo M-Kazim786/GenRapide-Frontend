@@ -1,58 +1,39 @@
 import axios from 'axios';
 import React, { useState } from "react";
 import UploadForm from "./components/UploadForm.jsx";
-import ResultMessage from "./components/ResultMessage";
 
 function App() {
-  const [score, setScore] = useState(null);
-  const [missingExperience, setMissingExperience] = useState("");
+  const [matchPercentage, setMatchPercentage] = useState(null);
+  const [finalResult, setFinalResult] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-  // const handleUpload = async (data) => {
-  //   try {
-  //     const response = await axios.post("/api/v1/rewriter/submit", data, {
-  //       headers: {
-  //         "Content-Type": "application/json"
-  //       },
-  //     });
-
-  //     const responseData = response.data;
-  //     console.log("Response data:", responseData);
-
-  //     setScore(responseData.score);
-  //     setMissingExperience(responseData.missingExperience || "");
-  //   } catch (error) {
-  //     console.error("Error uploading data:", error);
-  //   }
-  // };
-
-
-  const handleUpload = async (formData) => { // Renamed parameter to formData for clarity
+  const handleUpload = async (formData) => {
+    setIsLoading(true);
     try {
-      const response = await axios.post("/api/v1/rewriter/match", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data" // Set content type to multipart/form-data
-        },
+      const response = await axios.post("/api/v1/rewriter/upload", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
       });
 
       const responseData = response.data;
       console.log("Response data:", responseData);
 
-      setScore(responseData.score);
-      setMissingExperience(responseData.missingExperience || "");
+      setMatchPercentage(responseData.matchPercentage);
+      setFinalResult(responseData.finalResult);
     } catch (error) {
       console.error("Error uploading data:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
-
-
-
   return (
-    <div className="App">
-      <UploadForm onUpload={handleUpload} />
-      {score !== null && (
-        <ResultMessage score={score} missingExperience={missingExperience} />
-      )}
+    <div className="App bg-[#101115] min-h-screen">
+      <UploadForm
+        onUpload={handleUpload}
+        isLoading={isLoading}
+        matchPercentage={matchPercentage}
+        finalResult={finalResult}
+      />
     </div>
   );
 }
