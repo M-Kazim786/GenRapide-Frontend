@@ -6,6 +6,7 @@ function App() {
   const [matchPercentage, setMatchPercentage] = useState(null);
   const [finalResult, setFinalResult] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [downloadLink, setDownloadLink] = useState("");
 
   const handleUpload = async (formData) => {
     setIsLoading(true);
@@ -19,6 +20,9 @@ function App() {
 
       setMatchPercentage(responseData.matchPercentage);
       setFinalResult(responseData.finalResult);
+      setDownloadLink(responseData.downloadLink); 
+      console.log(responseData.downloadLink);
+
     } catch (error) {
       console.error("Error uploading data:", error);
     } finally {
@@ -33,6 +37,7 @@ function App() {
         isLoading={isLoading}
         matchPercentage={matchPercentage}
         finalResult={finalResult}
+        downloadLink={downloadLink}
       />
     </div>
   );

@@ -10,6 +10,7 @@ export default function UploadForm({
   matchPercentage,
   resultMessage,
   finalResult,
+  downloadLink
 }) {
   const [requirementsFile, setRequirementsFile] = useState(null);
   const [resumeFile, setResumeFile] = useState(null);
@@ -214,6 +215,7 @@ export default function UploadForm({
               <ResultMessage
                 matchPercentage={matchPercentage}
                 finalResult={finalResult}
+                downloadLink={downloadLink}
               />
             )
           )}
