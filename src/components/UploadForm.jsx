@@ -1,14 +1,14 @@
 import React, { useState } from "react";
-import { ArrowsPointingOutIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import RequirementsInput from "./RequirementsInput";
+import ResumeInput from "./ResumeInput";
+import ActionsSection from "./ActionsSection";
+import ResultMessage from "./ResultMessage";
 import { CubeIcon } from "@heroicons/react/24/solid";
-import ResultMessage from "./ResultMessage.jsx";
-import "boxicons/css/boxicons.min.css";
 
 export default function UploadForm({
   onUpload,
   isLoading,
   matchPercentage,
-  resultMessage,
   finalResult,
   downloadLink
 }) {
@@ -17,8 +17,6 @@ export default function UploadForm({
   const [requirementsText, setRequirementsText] = useState("");
   const [resumeText, setResumeText] = useState("");
   const [includeRequirements, setIncludeRequirements] = useState(true);
-  const [expandRequirements, setExpandRequirements] = useState(false);
-  const [expandResume, setExpandResume] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -44,10 +42,6 @@ export default function UploadForm({
   const handleCancelProcessing = () => {
     // cancel functionality here...
     console.log("Processing cancelled");
-  };
-
-  const wordCount = (text) => {
-    return text.trim() ? text.trim().split(/\s+/).length : 0;
   };
 
   return (
@@ -83,114 +77,17 @@ export default function UploadForm({
         <form className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {includeRequirements && (
-              <div
-                className={`bg-[#1E1E1E] rounded-lg p-4 transition-all duration-300 ${
-                  expandRequirements
-                    ? "fixed top-0 left-0 w-full h-full z-50 bg-[#1E1E1E] p-6"
-                    : ""
-                }`}
-              >
-                <div className="flex justify-between items-center mb-2">
-                  <h2 className="text-lg font-medium">Requirements</h2>
-                  <div className="flex items-center space-x-2">
-                    <span className="text-sm text-gray-400">
-                      {wordCount(requirementsText)} Words
-                    </span>
-                    <button
-                      type="button"
-                      onClick={() => setExpandRequirements(!expandRequirements)}
-                      className="text-gray-400 hover:text-white"
-                    >
-                      <ArrowsPointingOutIcon className="w-5 h-5" />
-                    </button>
-                  </div>
-                </div>
-                {expandRequirements ? (
-                  <>
-                    <textarea
-                      value={requirementsText}
-                      onChange={(e) => setRequirementsText(e.target.value)}
-                      placeholder="Enter Your Requirements."
-                      className="w-full h-[calc(100vh-200px)] bg-[#1E1E1E] text-white placeholder-gray-500 resize-none focus:outline-none"
-                    ></textarea>
-                    <button
-                      type="button"
-                      onClick={() => setExpandRequirements(false)}
-                      className="text-gray-400 hover:text-white mt-2"
-                    >
-                      <XMarkIcon className="w-5 h-5" />
-                    </button>
-                  </>
-                ) : (
-                  <textarea
-                    value={requirementsText}
-                    onChange={(e) => setRequirementsText(e.target.value)}
-                    placeholder="Enter Your Requirements."
-                    className="w-full h-64 bg-[#1E1E1E] text-white placeholder-gray-500 resize-none focus:outline-none"
-                  ></textarea>
-                )}
-                <input
-                  type="file"
-                  accept=".pdf"
-                  onChange={(e) => setRequirementsFile(e.target.files[0])}
-                  className="mt-2 text-sm text-gray-400"
-                />
-              </div>
-            )}
-
-            <div
-              className={`bg-[#1E1E1E] rounded-lg p-4 transition-all duration-300 ${
-                expandResume
-                  ? "fixed top-0 left-0 w-full h-full z-50 bg-[#1E1E1E] p-6"
-                  : ""
-              }`}
-            >
-              <div className="flex justify-between items-center mb-2">
-                <h2 className="text-lg font-medium">Projects / Resume</h2>
-                <div className="flex items-center space-x-2">
-                  <span className="text-sm text-gray-400">
-                    {wordCount(resumeText)} Words
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => setExpandResume(!expandResume)}
-                    className="text-gray-400 hover:text-white"
-                  >
-                    <ArrowsPointingOutIcon className="w-5 h-5" />
-                  </button>
-                </div>
-              </div>
-              {expandResume ? (
-                <>
-                  <textarea
-                    value={resumeText}
-                    onChange={(e) => setResumeText(e.target.value)}
-                    placeholder="Enter Your Projects."
-                    className="w-full h-[calc(100vh-200px)] bg-[#1E1E1E] text-white placeholder-gray-500 resize-none focus:outline-none"
-                  ></textarea>
-                  <button
-                    type="button"
-                    onClick={() => setExpandResume(false)}
-                    className="text-gray-400 hover:text-white mt-2"
-                  >
-                    <XMarkIcon className="w-5 h-5" />
-                  </button>
-                </>
-              ) : (
-                <textarea
-                  value={resumeText}
-                  onChange={(e) => setResumeText(e.target.value)}
-                  placeholder="Enter Your Projects."
-                  className="w-full h-64 bg-[#1E1E1E] text-white placeholder-gray-500 resize-none focus:outline-none"
-                ></textarea>
-              )}
-              <input
-                type="file"
-                accept=".pdf"
-                onChange={(e) => setResumeFile(e.target.files[0])}
-                className="mt-2 text-sm text-gray-400"
+              <RequirementsInput
+                requirementsText={requirementsText}
+                setRequirementsText={setRequirementsText}
+                setRequirementsFile={setRequirementsFile}
               />
-            </div>
+            )}
+            <ResumeInput
+              resumeText={resumeText}
+              setResumeText={setResumeText}
+              setResumeFile={setResumeFile}
+            />
           </div>
 
           {isLoading ? (
@@ -220,43 +117,7 @@ export default function UploadForm({
             )
           )}
 
-          <div className="bg-[#1E1E1E] rounded-lg p-4">
-            <h2 className="text-lg font-medium mb-2">Actions</h2>
-            <div className="flex items-center space-x-2">
-              <div className="relative flex-grow">
-                <select
-                  className="w-full bg-[#232428] text-white py-2 px-4 pr-8 rounded appearance-none focus:outline-none cursor-pointer"
-                  defaultValue="Analyze"
-                >
-                  <option value="Analyze">Analyze</option>
-                  <option value="Check Plagiarism">Check Plagiarism</option>
-                </select>
-                <div className="absolute right-0 top-0 bottom-0 flex items-center px-3 pointer-events-none">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 text-gray-400"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M19 9l-7 7-7-7"
-                    />
-                  </svg>
-                </div>
-              </div>
-              <button
-                type="submit"
-                onClick={handleSubmit}
-                className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
-              >
-                Analyze
-              </button>
-            </div>
-          </div>
+          <ActionsSection handleSubmit={handleSubmit} />
         </form>
       </div>
     </div>

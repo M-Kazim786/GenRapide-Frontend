@@ -1,8 +1,8 @@
 import axios from "axios";
 import React, { useState } from "react";
-import UploadForm from "./components/UploadForm.jsx";
+import UploadForm from "./components/UploadForm";
 
-function App() {
+export default function App() {
   const [matchPercentage, setMatchPercentage] = useState(null);
   const [finalResult, setFinalResult] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -20,7 +20,7 @@ function App() {
 
       setMatchPercentage(responseData.matchPercentage);
       setFinalResult(responseData.finalResult);
-      setDownloadLink(responseData.downloadLink); 
+      setDownloadLink(responseData.downloadLink);
       console.log(responseData.downloadLink);
 
     } catch (error) {
@@ -42,5 +42,3 @@ function App() {
     </div>
   );
 }
-
-export default App;

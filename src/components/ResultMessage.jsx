@@ -34,7 +34,6 @@ export default function ResultMessage({ matchPercentage, finalResult, downloadLi
     }
   };
 
-
   return (
     <div
       className={`bg-[#1E1E1E] rounded-lg p-4 m-0 transition-all duration-300 ${isFullscreen ? "fixed top-0 left-0 w-full h-full z-50 p-6" : ""}`}
